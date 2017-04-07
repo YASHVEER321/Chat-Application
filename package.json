@@ -1,0 +1,30 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YASHVEER321/Chat-Application.git"
+  },
+  "keywords": [
+    "Socket io",
+    "Node js",
+    "chat app",
+    "Socket use in node js"
+  ],
+  "author": "Yash",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YASHVEER321/Chat-Application/issues"
+  },
+  "homepage": "https://github.com/YASHVEER321/Chat-Application#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "socket.io": "^1.7.3"
+  }
+}

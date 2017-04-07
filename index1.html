@@ -1,0 +1,94 @@
+<html>
+
+<head>
+    <title>Chat application with Node and Sockets</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+        var name,
+            socket = io.connect("http://localhost:3000");
+        $(function() {
+            //as the user to enter their nick name or name.
+            name = window.prompt("enter your name");
+            //If the name is not given, ask the user to enter once again
+            if (name == null) {
+                $("body").html(" please refresh the page and try again ");
+            } else {
+                socket.emit("clientMsg", {
+                    "name": name
+                });
+            }
+            //When send button is clicked on, send the message to server
+            $("#send").click(function() {
+                //send to the server with person name and message
+                socket.emit("clientMsg", {
+                    "name": name,
+                    "msg": $("#msg").val(),
+                    "r_name": $("#receiverName").val()
+                });
+            });
+
+            $("#disconnected").click(function() {
+                socket.disconnect();
+                alert('user disconnected' + data.name);
+            });
+            $("#reconnected").click(function() {
+                socket.emit("clientMsg", {
+                    "name": name,
+                    "msg": $("#msg").val(),
+                    "r_name": $("#receiverName").val()
+                });
+                alert('User Reconnected' + data.name);
+            });
+            //After sending message to the server, we'll have to wire up the event for it.
+            //We can do the following. Upon receiving the message print it to the message box
+            //that we've created in our html
+            socket.on("serverMsg", function(data) {
+                //Append the message from the server to the message box
+                $("#msgBox").append("<strong>" + data.name +
+                    "</strong>: " + data.msg + "<br/>");
+            });
+
+            $("#msg").on("keyup", function(event) {
+                socket.emit("sender", {
+                    name: name
+                });
+            });
+
+            socket.on("notify", function(data) {
+                //Append the message from the server to the message box
+                alert('Notification from' + data.name);
+                return;
+            });
+
+            socket.on("sender", function(data) {
+                $("#status").html(data.name + " is typing");
+                setTimeout(function() {
+                    $("#status").html('');
+                }, 3000);
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!--Message box: To show the sent/received messages-->
+    <div id="msgBox" style="height: 200px; width: 400px; border: 1px solid blue;margin-left: 38px;overflow: scroll;">
+        <h1 style="color:green;aligin">Chat Window
+            <h1>
+    </div>
+    <!--Textbox: to enter the message text-->
+    <label style="">Massage:</lable><input type="text" id="msg" style="width:300px;margin-left:40px;height:60px" /><br><br>
+    <!--Send: A button to send the message to others-->
+    <label style="">receiverName:</lable><input type="text" id="receiverName" style="width:300px;margin-left:6px;height:30px" /><br><br/>
+    
+    <!--All button-->
+    
+    <input type="submit" id="send" value="send" style="width:300px;margin-left:100px;height:30px"/>
+    <br/><br/>
+     <input type="submit" id="disconnected" value="Disconnected" style="width:300px;margin-left:100px;height:30px"/><br><br/>
+     <input type="submit" id="reconnected" value="reconnected" style="width:300px;margin-left:100px;height:30px"/>
+    <div id="status"></div>
+</body>
+
+</html>
